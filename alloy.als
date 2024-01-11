@@ -1,6 +1,5 @@
 open util/boolean as Bool
 
-// Signatures
 sig User {
   nama_pelanggan: String,
   username_pelanggan: String,
@@ -24,20 +23,17 @@ sig Resi {
   pembayaran: Pembayaran
 }
 
-// Facts
 fact PaymentResiRelation {
   // Relasi antara pembayaran dan Resi
   Resi.pembayaran.nominal = Pembayaran.nominal
 }
 
-// Predicates
 pred show {
   // Menunjukkan constraint yang relevan
   all r: Resi | r.nominal > 0
   all p: Pembayaran | p.nominal > 0
 }
 
-// System Signature
 sig System {
   users: set User,
   reservations: set Halaman_reservasi_PC,
@@ -45,13 +41,11 @@ sig System {
   receipts: set Resi
 }
 
-// System Facts
 fact PaymentReceiptRelation {
   // Pembayaran dan Resi terhubung melalui nominal
   all r: System.receipts | one p: System.payments | p.nominal = r.nominal
 }
 
-// Constraints
 fact UniqueUser {
   // Constraint: Setiap User memiliki nama, username, dan password yang unik
   all u1, u2: User | u1 != u2 => (u1.nama_pelanggan != u2.nama_pelanggan) && (u1.username_pelanggan != u2.username_pelanggan) && (u1.password_pelanggan != u2.password_pelanggan)
