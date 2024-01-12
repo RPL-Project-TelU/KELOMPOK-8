@@ -1,14 +1,12 @@
 sig AccPengguna{}
-sig EncryptedText {}
-
 
 
 //signature
 sig User {
   nama_pelanggan: AccPengguna,
   username_pelanggan: AccPengguna,
-  password_pelanggan: EncryptedText,
-  verifyUser: some Pembayaran
+  password_pelanggan: AccPengguna,
+  verifyUser: some Halaman_reservasi_PC
 }
 
 sig Halaman_reservasi_PC {
@@ -27,5 +25,3 @@ sig Resi {
   pembayaran: Pembayaran
 }
 
-
-run {} for 4
