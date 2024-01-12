@@ -28,7 +28,7 @@ sig Resi {
 
 
 
-// Predicates and Facts
+// Predicates
 pred NonEmptyUserCredentials {
   all u: User | u.nama_pelanggan != none and u.username_pelanggan != none and u.password_pelanggan != none
 }
@@ -42,20 +42,19 @@ pred UniquePCNumber {
 }
 
 // Assertions
-pred UserHasReservation {
+assert UserHasReservation {
   all u: User | some r: u.verifyUser | r in Halaman_reservasi_PC
 }
 
-pred ReceiptLinkedToPayment {
+assert ReceiptLinkedToPayment {
   all r: Resi | one p: Pembayaran | r.pembayaran = p
 }
 
-// Run command
+// run
 run NonEmptyUserCredentials for 2
 run PositivePaymentNominal for 2
 run UniquePCNumber for 2
-run UserHasReservation for 2
-run ReceiptLinkedToPayment for 2
 
-// Check command (example; you can add more checks based on your constraints)
+//check
+check UserHasReservation for 2
 
