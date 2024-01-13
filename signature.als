@@ -1,12 +1,10 @@
-sig AccPengguna{}
+// Signature
+sig AccPengguna {}
 
-
-//signature
 sig User {
-  nama_pelanggan: AccPengguna,
-  username_pelanggan: AccPengguna,
-  password_pelanggan: AccPengguna,
-  verifyUser: some Halaman_reservasi_PC
+  nama_pelanggan: String,
+  username_pelanggan: String,
+  password_pelanggan: String,
 }
 
 sig Halaman_reservasi_PC {
@@ -19,9 +17,11 @@ sig Pembayaran {
   nominal: Int
 }
 
-sig Resi {
-  nominal: Int,
-  buktiBeli: AccPengguna,
-  pembayaran: Pembayaran
+sig PC {
+  infoPC: Halaman_reservasi_PC
 }
 
+sig Resi {
+  nominal: Int,
+  buktiBeli: Pembayaran,
+}
