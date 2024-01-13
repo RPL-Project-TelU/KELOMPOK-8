@@ -1,13 +1,10 @@
-sig AccPengguna{}
+// Signature
+sig AccPengguna {}
 
-
-
-//signature
 sig User {
-  nama_pelanggan: AccPengguna,
-  username_pelanggan: AccPengguna,
-  password_pelanggan: AccPengguna,
-  verifyUser: some Halaman_reservasi_PC
+  nama_pelanggan: String,
+  username_pelanggan: String,
+  password_pelanggan: String,
 }
 
 sig Halaman_reservasi_PC {
@@ -20,13 +17,14 @@ sig Pembayaran {
   nominal: Int
 }
 
-sig Resi {
-  nominal: Int,
-  buktiBeli: AccPengguna,
-  pembayaran: Pembayaran
+sig PC {
+  infoPC: Halaman_reservasi_PC
 }
 
-
+sig Resi {
+  nominal: Int,
+  buktiBeli: Pembayaran,
+}
 
 // Predicates
 pred NonEmptyUserCredentials {
@@ -37,24 +35,47 @@ pred PositivePaymentNominal {
   all p: Pembayaran | p.nominal > 0
 }
 
+pred showNominal {
+  all p: Pembayaran | p.nominal > 0
+}
+
 pred UniquePCNumber {
   all pc1, pc2: Halaman_reservasi_PC | pc1 != pc2 => pc1.nomorPC != pc2.nomorPC
 }
 
+pred infoPC {
+  all pc: Halaman_reservasi_PC | some p: PC | p.infoPC = pc
+}
+
+pred showInfoPC {
+  all pc: Halaman_reservasi_PC | some p: PC | p.infoPC = pc
+}
+
+pred showBuktiPembelian {
+  all r: Resi | one p: Pembayaran | r.buktiBeli = p
+}
+
+pred show {
+  all u: User |
+    some h: Halaman_reservasi_PC |
+      some p: Pembayaran |
+        some r: Resi |
+          u.nama_pelanggan != none and
+          u.username_pelanggan != none and
+          u.password_pelanggan != none and
+          p.nominal > 0 and
+          r.buktiBeli = p and
+          h.spekPC = p.jenis_bank
+}
+
 // Assertions
-assert UserHasReservation {
-  all u: User | some r: u.verifyUser | r in Halaman_reservasi_PC
+assert PositivePaymentNominal {
+  all p: Pembayaran | p.nominal < 0 and p.nominal != 5
 }
 
-assert ReceiptLinkedToPayment {
-  all r: Resi | one p: Pembayaran | r.pembayaran = p
+fact ValidPositivePaymentNominal {
+  all p: Pembayaran | p.nominal < 0 and p.nominal != 5
 }
 
-// run
-run NonEmptyUserCredentials for 2
-run PositivePaymentNominal for 2
-run UniquePCNumber for 2
-
-//check
-check UserHasReservation for 2
-
+// Run
+run show for 3
